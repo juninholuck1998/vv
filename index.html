@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="theme-color" content="#B22222"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="CBMMG Cron"/>
+<meta name="application-name" content="CBMMG Cron"/>
+<meta name="description" content="Cronograma de estudos e questoes para o concurso CBMMG 2026"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png"/>
+<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png"/>
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png"/>
+<link rel="shortcut icon" href="icons/icon-192.png"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"/>
+<link rel="stylesheet" href="css/style.css"/>
+<title>CBMMG — Missao Aprovacao</title>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="hdr">
+  <div class="hdr-shimmer"></div>
+  <div class="hdr-body">
+    <div class="hdr-logo"><img src="icons/icon-192.png" alt="CBMMG"/></div>
+    <div class="hdr-info">
+      <div class="hdr-mission">Operacao Aprovacao</div>
+      <div class="hdr-title">CBMMG — <em>Missao Aprovacao</em></div>
+    </div>
+    <div class="hdr-right">
+      <div class="hdr-cd" id="hcd">--</div>
+      <div class="hdr-cdl">dias</div>
+      <div class="hdr-prova" id="hdr-prova-date">26/07/2026</div>
+    </div>
+  </div>
+  <div class="xp-bar-wrap">
+    <div class="xp-level-badge rank-badge" id="xp-lvl">🪖 Soldado</div>
+    <div class="xp-bar-bg"><div class="xp-bar-fill" id="xp-fill" style="width:0%"></div></div>
+    <div class="xp-info" id="xp-txt">0 XP</div>
+    <div class="streak-badge" id="streak-badge">🔥 0</div>
+  </div>
+  <div class="global-progress">
+    <div class="global-progress-fill" id="global-progress-fill" style="width:0%"></div>
+    <div class="global-progress-lbl" id="global-progress-lbl">Edital: 0%</div>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<div class="tabs">
+  <div class="tab active" data-tab="dash"><span class="tab-ico">🎮</span><span class="tab-lbl">Missao</span></div>
+  <div class="tab" data-tab="cal"><span class="tab-ico">🗓</span><span class="tab-lbl">Calendario</span></div>
+  <div class="tab" data-tab="edital"><span class="tab-ico">📚</span><span class="tab-lbl">Edital</span></div>
+  <div class="tab" data-tab="topics"><span class="tab-ico">✅</span><span class="tab-lbl">Topicos</span></div>
+  <div class="tab" data-tab="foco"><span class="tab-ico">⏱</span><span class="tab-lbl">Foco</span></div>
+  <div class="tab" data-tab="questoes"><span class="tab-ico">📝</span><span class="tab-lbl">Questoes</span></div>
+  <div class="tab" data-tab="planner"><span class="tab-ico">📋</span><span class="tab-lbl">Planejar</span></div>
+  <div class="tab" data-tab="config"><span class="tab-ico">⚙️</span><span class="tab-lbl">Config</span></div>
+</div>
+
+<!-- ═══ DASHBOARD ═══ -->
+<div id="panel-dash" class="panel active">
+<div class="main">
+  <div id="late-card-zone"></div>
+  <div class="sh" style="margin-top:0"><span style="font-size:16px">⚡</span><span class="sh-title">Status da Missao</span><div class="sh-line"></div></div>
+  <div class="stats-row four">
+    <div class="stat-card gold"><div class="sc-val" id="d-concl" style="color:var(--gold2)">0</div><div class="sc-lbl">Concluidos</div></div>
+    <div class="stat-card green"><div class="sc-val" id="d-revpend" style="color:var(--grn2)">0</div><div class="sc-lbl">Rev. pendentes</div></div>
+    <div class="stat-card red"><div class="sc-val" id="d-atrasad" style="color:#ff8080">0</div><div class="sc-lbl">Atrasadas</div></div>
+    <div class="stat-card blue"><div class="sc-val" id="d-total-pct" style="color:var(--blu2)">0%</div><div class="sc-lbl">Progresso</div></div>
+  </div>
+
+  <div class="sh"><span style="font-size:16px">📅</span><span class="sh-title">Hoje</span><div class="sh-line"></div><span class="sh-count" id="today-count">0 tarefas</span></div>
+  <div class="today-card">
+    <div class="today-head">
+      <div class="today-head-title">Tarefas do dia</div>
+      <div class="today-head-date" id="today-date-lbl"></div>
+    </div>
+    <div class="today-body" id="today-body"></div>
+  </div>
+
+  <div class="sh"><span style="font-size:16px">📆</span><span class="sh-title">Proximos 7 dias</span><div class="sh-line"></div></div>
+  <div class="week-strip"><div class="week-days" id="week-strip"></div></div>
+  <div id="week-detail"></div>
+
+  <div id="weak-zone"></div>
+  <div id="heatmap-zone"></div>
+</div>
+</div>
+
+<!-- ═══ CALENDAR ═══ -->
+<div id="panel-cal" class="panel">
+<div class="main">
+  <div class="cal-nav">
+    <button class="cal-btn" onclick="calNav(-1)">◀</button>
+    <div class="cal-month" id="cal-month">—</div>
+    <button class="cal-btn" onclick="calNav(1)">▶</button>
+  </div>
+  <div class="cal-grid-head">
+    <div class="cgh">Dom</div><div class="cgh">Seg</div><div class="cgh">Ter</div>
+    <div class="cgh">Qua</div><div class="cgh">Qui</div><div class="cgh">Sex</div><div class="cgh">Sab</div>
+  </div>
+  <div class="cal-grid" id="cal-grid"></div>
+  <div class="cal-legend">
+    <div class="cal-legend-item"><span class="cal-legend-dot" style="background:#ef4444"></span>Aula</div>
+    <div class="cal-legend-item"><span class="cal-legend-dot" style="background:#f59e0b"></span>Rev.1a</div>
+    <div class="cal-legend-item"><span class="cal-legend-dot" style="background:#22c55e"></span>Rev.2a</div>
+    <div class="cal-legend-item"><span class="cal-legend-dot" style="background:#8b5cf6"></span>Rev.3a/4a</div>
+    <div class="cal-legend-item"><span class="cal-legend-dot" style="background:#3b82f6"></span>Manual</div>
+    <div class="cal-legend-item"><span class="cal-legend-dot" style="background:#a78bfa"></span>Plano</div>
+  </div>
+  <div id="cal-detail"></div>
+</div>
+</div>
+
+<!-- ═══ EDITAL ═══ -->
+<div id="panel-edital" class="panel">
+<div class="main" id="edital-body"></div>
+</div>
+
+<!-- ═══ TOPICOS ═══ -->
+<div id="panel-topics" class="panel">
+<div class="main">
+  <div class="topics-filter-bar">
+    <input type="text" class="topics-search" id="topics-search" placeholder="🔎 Buscar topico..." oninput="renderTopics()"/>
+    <div class="topics-chips" id="topics-chips-imp">
+      <span class="tchip active" data-imp="all" onclick="topicsChipImp('all')">Todas</span>
+      <span class="tchip" data-imp="ma" onclick="topicsChipImp('ma')">Muito alta</span>
+      <span class="tchip" data-imp="a" onclick="topicsChipImp('a')">Alta</span>
+      <span class="tchip" data-imp="m" onclick="topicsChipImp('m')">Media</span>
+      <span class="tchip" data-imp="b" onclick="topicsChipImp('b')">Baixa</span>
+    </div>
+    <div class="topics-chips" id="topics-chips-sts">
+      <span class="tchip active" data-sts="all" onclick="topicsChipSts('all')">Todos</span>
+      <span class="tchip" data-sts="pend" onclick="topicsChipSts('pend')">Pendente</span>
+      <span class="tchip" data-sts="rev" onclick="topicsChipSts('rev')">Em revisao</span>
+      <span class="tchip" data-sts="done" onclick="topicsChipSts('done')">Concluido</span>
+    </div>
+  </div>
+  <div class="imp-legend">
+    <span><span class="tar-imp imp-ma"></span>Muito alta</span>
+    <span><span class="tar-imp imp-a"></span>Alta</span>
+    <span><span class="tar-imp imp-m"></span>Media</span>
+    <span><span class="tar-imp imp-b"></span>Baixa</span>
+  </div>
+  <div id="topics-body"></div>
+</div>
+</div>
+
+<!-- ═══ FOCO ═══ -->
+<div id="panel-foco" class="panel">
+<div class="foco-screen">
+  <div class="foco-mat-sel">
+    <div class="foco-mat-lbl">Estudando qual materia agora?</div>
+    <div class="foco-mat-grid" id="foco-mat-grid"></div>
+  </div>
+
+  <div class="foco-timer-wrap">
+    <div class="foco-status-badge idle" id="foco-status">PRONTO</div>
+    <div class="foco-clock idle" id="foco-clock">00:00:00</div>
+    <div class="foco-mat-indicator" id="foco-mat-indicator">
+      <div class="foco-mat-dot" id="foco-mat-dot" style="background:#555"></div>
+      <span id="foco-mat-name">Selecione uma materia acima</span>
+    </div>
+    <div class="foco-btn-row">
+      <button class="foco-btn-lap" id="foco-btn-lap" onclick="focoLap()" title="Parcial" style="opacity:.4;pointer-events:none">🏁</button>
+      <button class="foco-btn-play" id="foco-btn-play" onclick="focoToggle()">▶</button>
+      <button class="foco-btn-stop" id="foco-btn-stop" onclick="focoStop()" style="opacity:.4;pointer-events:none">⏹</button>
+    </div>
+    <div class="pomo-bar" id="pomo-bar">
+      <button class="cfg-btn" id="pomo-off" onclick="pomoSet(null)">⛔ Pomodoro off</button>
+      <button class="cfg-btn" id="pomo-25" onclick="pomoSet('25/5')">🍅 25/5</button>
+      <button class="cfg-btn" id="pomo-50" onclick="pomoSet('50/10')">🍅 50/10</button>
+    </div>
+    <div class="foco-session-info">
+      <div class="fsi-item"><div class="fsi-val" id="fsi-sess">0:00</div><div class="fsi-lbl">Sessao</div></div>
+      <div class="fsi-item"><div class="fsi-val" id="fsi-hoje">0:00</div><div class="fsi-lbl">Hoje</div></div>
+      <div class="fsi-item"><div class="fsi-val" id="fsi-semana">0:00</div><div class="fsi-lbl">Semana</div></div>
+    </div>
+  </div>
+
+  <div class="foco-stats" id="foco-stats-wrap">
+    <div class="foco-stats-head">
+      <span>⏱ Tempo real por materia</span>
+      <span id="foco-total-time" style="color:var(--gold2)">0h total</span>
+    </div>
+    <div id="foco-stats-body"></div>
+  </div>
+
+  <div class="foco-log" id="foco-log-wrap">
+    <div class="foco-stats-head">
+      <span>📋 Historico de sessoes</span>
+      <button onclick="focoClearLog()" style="background:transparent;border:none;color:rgba(255,100,100,.4);font-size:11px;cursor:pointer;font-family:Oswald,sans-serif">Limpar</button>
+    </div>
+    <div id="foco-log-body"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══ QUESTOES ═══ -->
+<div id="panel-questoes" class="panel">
+<div class="main">
+  <div class="sh" style="margin-top:0"><span style="font-size:16px">📝</span><span class="sh-title">Questoes resolvidas</span><div class="sh-line"></div></div>
+
+  <div class="q-stats-strip">
+    <div class="q-stat"><div class="q-stat-val" id="q-total">0</div><div class="q-stat-lbl">Feitas</div></div>
+    <div class="q-stat"><div class="q-stat-val" id="q-ac">0</div><div class="q-stat-lbl">Acertos</div></div>
+    <div class="q-stat"><div class="q-stat-val" id="q-pct">--</div><div class="q-stat-lbl">% Geral</div></div>
+    <div class="q-stat"><div class="q-stat-val" id="q-top">0</div><div class="q-stat-lbl">Topicos</div></div>
+  </div>
+
+  <div id="q-alert-zone"></div>
+
+  <div class="q-form">
+    <div class="q-form-row">
+      <div class="sched-input-row">
+        <label class="sched-lbl">Materia</label>
+        <select class="sched-input" id="q-mat" onchange="updateQTopics()"></select>
+      </div>
+      <div class="sched-input-row">
+        <label class="sched-lbl">Tipo</label>
+        <select class="sched-input" id="q-tipo">
+          <option value="aula">Aula</option>
+          <option value="rev1">Rev.1a</option>
+          <option value="rev2">Rev.2a</option>
+          <option value="rev3">Rev.3a+</option>
+          <option value="simulado">Simulado</option>
+        </select>
+      </div>
+    </div>
+    <div class="sched-input-row" style="margin-bottom:10px">
+      <label class="sched-lbl">Topico</label>
+      <select class="sched-input" id="q-topic"></select>
+    </div>
+    <div class="q-form-row">
+      <div class="sched-input-row">
+        <label class="sched-lbl">Total</label>
+        <input type="number" class="sched-input" id="q-tot" min="1" placeholder="Ex: 20"/>
+      </div>
+      <div class="sched-input-row">
+        <label class="sched-lbl">Acertos</label>
+        <input type="number" class="sched-input" id="q-ac-in" min="0" placeholder="Ex: 14"/>
+      </div>
+    </div>
+    <button onclick="lancarQuestao()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--rdk),var(--r));color:#fff;border:none;border-radius:9px;font-family:Oswald,sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;margin-top:4px">📝 REGISTRAR QUESTOES</button>
+    <div id="q-msg" style="font-size:11px;text-align:center;margin-top:6px;min-height:16px"></div>
+  </div>
+
+  <div class="sh"><span style="font-size:16px">📊</span><span class="sh-title">Assertividade por materia</span><div class="sh-line"></div></div>
+  <div id="q-mat-bars-card"></div>
+
+  <div class="q-charts">
+    <div class="q-chart-card">
+      <div class="q-chart-title">Volume por materia</div>
+      <div class="q-chart-leg" id="q-leg-vol"></div>
+      <div class="q-chart-wrap"><canvas id="q-ch-vol"></canvas></div>
+    </div>
+    <div class="q-chart-card">
+      <div class="q-chart-title">Assertividade %</div>
+      <div class="q-chart-leg" id="q-leg-mat"></div>
+      <div class="q-chart-wrap"><canvas id="q-ch-mat"></canvas></div>
+    </div>
+    <div class="q-chart-card full">
+      <div class="q-chart-title">Evolucao por sessao</div>
+      <div class="q-chart-wrap tall"><canvas id="q-ch-evo"></canvas></div>
+    </div>
+  </div>
+
+  <div class="sh"><span style="font-size:16px">🗒</span><span class="sh-title">Historico</span><div class="sh-line"></div></div>
+  <div class="q-table-wrap">
+    <table class="q-table">
+      <thead><tr><th>Data</th><th>Mat</th><th>Topico</th><th>Tot</th><th>%</th><th></th></tr></thead>
+      <tbody id="q-hist-body"></tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ═══ PLANNER ═══ -->
+<div id="panel-planner" class="panel">
+<div class="main">
+  <div id="plan-status-card" style="display:none;margin-bottom:14px"></div>
+
+  <div class="sh" style="margin-top:0"><span style="font-size:16px">📌</span><span class="sh-title">Adicionar ao Calendario</span><div class="sh-line"></div></div>
+  <div style="background:var(--bg2);border-radius:var(--rad);border:1px solid var(--bd);padding:14px;margin-bottom:14px">
+    <div class="sched-input-row">
+      <label class="sched-lbl">Materia</label>
+      <select class="sched-input" id="man-mat" onchange="updateManTopics()"></select>
+    </div>
+    <div class="sched-input-row">
+      <label class="sched-lbl">Topico</label>
+      <select class="sched-input" id="man-topic"></select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="sched-input-row">
+        <label class="sched-lbl">Data</label>
+        <input type="date" class="sched-input" id="man-date"/>
+      </div>
+      <div class="sched-input-row">
+        <label class="sched-lbl">Nota (opcional)</label>
+        <input type="text" class="sched-input" id="man-note" placeholder="Ex: aula 3/14"/>
+      </div>
+    </div>
+    <button onclick="addManualEvent()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--rdk),var(--r));color:#fff;border:none;border-radius:9px;font-family:Oswald,sans-serif;font-size:14px;font-weight:700;letter-spacing:1px;cursor:pointer;margin-top:4px">📌 ADICIONAR</button>
+    <div id="man-msg" style="font-size:11px;text-align:center;margin-top:6px;min-height:16px"></div>
+  </div>
+  <div class="sh"><span style="font-size:16px">📅</span><span class="sh-title">Eventos manuais</span><div class="sh-line"></div><span class="sh-count" id="man-count">0</span></div>
+  <div id="man-list"></div>
+
+  <div class="sh" style="margin-top:20px"><span style="font-size:16px">⚙️</span><span class="sh-title">Gerador de Cronograma</span><div class="sh-line"></div></div>
+  <div style="background:var(--bg2);border-radius:var(--rad);border:1px solid var(--bd);padding:14px;margin-bottom:14px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px">
+      <button id="mode-btn-linear" onclick="setPlanMode('linear')" style="padding:10px;border-radius:8px;border:2px solid var(--blue);background:rgba(29,78,216,.25);color:#93c5fd;font-family:Oswald,sans-serif;font-size:12px;font-weight:700;cursor:pointer">📄 LINEAR</button>
+      <button id="mode-btn-cycle" onclick="setPlanMode('cycle')" style="padding:10px;border-radius:8px;border:2px solid var(--bd);background:transparent;color:var(--t3);font-family:Oswald,sans-serif;font-size:12px;font-weight:700;cursor:pointer">🔄 CICLO</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div class="sched-input-row">
+        <label class="sched-lbl">Inicio</label>
+        <input type="date" class="sched-input" id="plan-start"/>
+      </div>
+      <div class="sched-input-row">
+        <label class="sched-lbl">Horas/dia</label>
+        <input type="number" class="sched-input" id="plan-hours" min="0.5" max="12" step="0.5" value="3"/>
+      </div>
+    </div>
+    <div id="linear-opts">
+      <div class="sched-input-row" style="margin-bottom:10px">
+        <label class="sched-lbl">Materias</label>
+        <div id="plan-mats" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:6px"></div>
+      </div>
+      <div class="sched-input-row" style="margin-bottom:10px">
+        <label class="sched-lbl">Ordenar</label>
+        <select class="sched-input" id="plan-order">
+          <option value="imp">Importancia</option>
+          <option value="mat">Materia</option>
+          <option value="dur">Duracao</option>
+        </select>
+      </div>
+    </div>
+    <div id="cycle-opts" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+        <div class="sched-input-row">
+          <label class="sched-lbl">Mat/dia</label>
+          <select class="sched-input" id="cycle-per-day">
+            <option value="1">1</option><option value="2" selected>2</option><option value="3">3</option><option value="4">4</option>
+          </select>
+        </div>
+        <div class="sched-input-row">
+          <label class="sched-lbl">Tempo/bloco</label>
+          <select class="sched-input" id="cycle-block-min">
+            <option value="30">30 min</option><option value="45">45 min</option>
+            <option value="60" selected>1h</option><option value="90">1h30</option><option value="120">2h</option>
+          </select>
+        </div>
+      </div>
+      <div class="sched-input-row" style="margin-bottom:8px">
+        <label class="sched-lbl">Materias no ciclo</label>
+        <div id="cycle-order-list" style="display:flex;flex-direction:column;gap:4px;margin-bottom:10px"></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <select class="sched-input" id="cycle-add-sel" style="flex:1"><option value="">— adicionar —</option></select>
+          <button onclick="cycleAdd()" style="padding:10px 14px;background:linear-gradient(135deg,var(--rdk),var(--r));color:#fff;border:none;border-radius:8px;font-family:Oswald,sans-serif;font-weight:700;cursor:pointer">+ Add</button>
+        </div>
+      </div>
+    </div>
+    <button onclick="previewPlan()" class="btn-plan">👁 VISUALIZAR</button>
+    <div id="plan-stats" style="display:none"></div>
+    <div id="plan-preview" style="display:none"></div>
+    <button onclick="confirmPlan()" id="plan-confirm-btn" style="display:none;width:100%;padding:12px;background:linear-gradient(135deg,#14532d,var(--green));color:#fff;border:none;border-radius:9px;font-family:Oswald,sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px">✅ CONFIRMAR</button>
+  </div>
+</div>
+</div>
+
+<!-- ═══ CONFIG ═══ -->
+<div id="panel-config" class="panel">
+<div class="main">
+  <div class="sh" style="margin-top:0"><span style="font-size:16px">⚙️</span><span class="sh-title">Configuracoes</span><div class="sh-line"></div></div>
+  <div id="config-body"></div>
+</div>
+</div>
+
+<div id="modal-zone"></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="js/data.js"></script>
+<script src="js/state.js"></script>
+<script src="js/modals.js"></script>
+<script src="js/reschedule.js"></script>
+<script src="js/ui-dash.js"></script>
+<script src="js/ui-cal.js"></script>
+<script src="js/ui-edital.js"></script>
+<script src="js/ui-topics.js"></script>
+<script src="js/ui-foco.js"></script>
+<script src="js/ui-planner.js"></script>
+<script src="js/ui-questoes.js"></script>
+<script src="js/ui-config.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
